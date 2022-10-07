@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  backend:
+    build: .
+    container_name: django
+    volumes:
+      - ./:/usr/src/app/
+    expose:
+      - 8080
+    ports:
+      - "8080:8080"
