@@ -5,7 +5,6 @@ from rest_framework import status
 
 from deputados.models import Deputado
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -29,7 +28,9 @@ def consumir_api_deputados_camara():
     }
     """
 
-    url = "https://dadosabertos.camara.leg.br/api/v2/deputados?ordem=ASC&ordenarPor=nome"
+    url = (
+        "https://dadosabertos.camara.leg.br/api/v2/deputados?ordem=ASC&ordenarPor=nome"
+    )
     headers = {
         "accept": "application/json",
     }
@@ -44,24 +45,26 @@ def consumir_api_deputados_camara():
 def popular_base_com_dados_deputados():
     json_deputados = consumir_api_deputados_camara()
 
-    for deputado in json_deputados.get('dados'):
-        id_deputado = deputado.get('id')
-        nome = deputado.get('nome')
+    for deputado in json_deputados.get("dados"):
+        id_deputado = deputado.get("id")
+        nome = deputado.get("nome")
 
         try:
             dep_db = Deputado.objects.get_or_create(
-                id_api = id_deputado,
-                uri = deputado.get('uri'),
-                nome = nome,
-                sigla_partido = deputado.get('siglaPartido'),
-                uri_partido = deputado.get('uriPartido'),
-                sigla_uf = deputado.get('siglaUf'),
-                id_legislatura = deputado.get('idLegislatura'),
-                url_foto = deputado.get('urlFoto'),
-                email = deputado.get('email')
+                id_api=id_deputado,
+                uri=deputado.get("uri"),
+                nome=nome,
+                sigla_partido=deputado.get("siglaPartido"),
+                uri_partido=deputado.get("uriPartido"),
+                sigla_uf=deputado.get("siglaUf"),
+                id_legislatura=deputado.get("idLegislatura"),
+                url_foto=deputado.get("urlFoto"),
+                email=deputado.get("email"),
             )
             logger.warning(f"Deputado: {dep_db[0]}, cadastrado com sucesso!")
         except Exception as save_deputado_exception:
-            logger.error(f"Erro ao salvar deputado no banco. "
-                             f"\nDetalhe do erro: {save_deputado_exception.args}")
+            logger.error(
+                f"Erro ao salvar deputado no banco. "
+                f"\nDetalhe do erro: {save_deputado_exception.args}"
+            )
             logger.error(f"Dados do Deputado: {nome}, ID: {id_deputado}")

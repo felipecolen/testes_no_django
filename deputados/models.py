@@ -20,7 +20,7 @@ class Deputado(models.Model):
     }
     """
 
-    id_api = models.PositiveIntegerField(verbose_name='Id na API da Câmara')
+    id_api = models.PositiveIntegerField(verbose_name="Id na API da Câmara")
     uri = models.URLField()
     nome = models.CharField(max_length=255)
     sigla_partido = models.CharField(max_length=10)
@@ -35,4 +35,3 @@ class Deputado(models.Model):
 
     class Meta:
         ordering = ("nome",)
-
