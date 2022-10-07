@@ -42,8 +42,9 @@ class EstruturaJsonDeputadosFactory():
         # nesse caso só vai listar a chave "dados"
         self.chaves = [chave for chave in self.json_dados.keys()]
 
+        self.lista_deputados = self.json_dados.get('dados')
         # vamos pegar os valores da chave "dados", que é uma lista
         # o primeiro item vai conter o dicionário/json com os dados do deputado, de fato
-        primeiro_item_da_lista = self.json_dados.get('dados')[0]
+        primeiro_item_da_lista = self.lista_deputados[0]
         self.chaves_dados_do_deputado = [chave for chave in primeiro_item_da_lista.keys()]
 

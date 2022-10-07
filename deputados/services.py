@@ -70,9 +70,13 @@ def salvar_dados_do_deputado_no_banco(deputado: dict):
         logger.error(f"Dados do Deputado: {nome}, ID: {id_deputado}")
 
 
-def popular_base_com_dados_deputados():
-    json_deputados = consumir_api_deputados_camara()
+def popular_base_com_dados_deputados(json_deputados: dict):
     lista_deputados = processar_retorno_da_api(json_deputados)
 
     for deputado in lista_deputados:
         salvar_dados_do_deputado_no_banco(deputado)
+
+
+def executar_scripts_para_obter_e_salvar_os_dados():
+    json_deputados = consumir_api_deputados_camara()
+    return popular_base_com_dados_deputados(json_deputados)
