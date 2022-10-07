@@ -34,5 +34,5 @@ class Deputado(models.Model):
         return f"{self.nome} ({self.id_api})"
 
     class Meta:
-        ordering = ("-id",)
+        ordering = ("nome",)
 
