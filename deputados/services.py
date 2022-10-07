@@ -42,29 +42,37 @@ def consumir_api_deputados_camara():
         logger.error(f"ERRO ao consultar PJE " f"status_code {response.status_code}")
 
 
+def processar_retorno_da_api(retorno: dict):
+    return retorno.get("dados")
+
+
+def salvar_dados_do_deputado_no_banco(deputado: dict):
+    id_deputado = deputado.get("id")
+    nome = deputado.get("nome")
+    try:
+        dep_db = Deputado.objects.get_or_create(
+            id_api=id_deputado,
+            uri=deputado.get("uri"),
+            nome=nome,
+            sigla_partido=deputado.get("siglaPartido"),
+            uri_partido=deputado.get("uriPartido"),
+            sigla_uf=deputado.get("siglaUf"),
+            id_legislatura=deputado.get("idLegislatura"),
+            url_foto=deputado.get("urlFoto"),
+            email=deputado.get("email"),
+        )
+        logger.warning(f"Deputado: {dep_db[0]}, cadastrado com sucesso!")
+    except Exception as save_deputado_exception:
+        logger.error(
+            f"Erro ao salvar deputado no banco. "
+            f"\nDetalhe do erro: {save_deputado_exception.args}"
+        )
+        logger.error(f"Dados do Deputado: {nome}, ID: {id_deputado}")
+
+
 def popular_base_com_dados_deputados():
     json_deputados = consumir_api_deputados_camara()
+    lista_deputados = processar_retorno_da_api(json_deputados)
 
-    for deputado in json_deputados.get("dados"):
-        id_deputado = deputado.get("id")
-        nome = deputado.get("nome")
-
-        try:
-            dep_db = Deputado.objects.get_or_create(
-                id_api=id_deputado,
-                uri=deputado.get("uri"),
-                nome=nome,
-                sigla_partido=deputado.get("siglaPartido"),
-                uri_partido=deputado.get("uriPartido"),
-                sigla_uf=deputado.get("siglaUf"),
-                id_legislatura=deputado.get("idLegislatura"),
-                url_foto=deputado.get("urlFoto"),
-                email=deputado.get("email"),
-            )
-            logger.warning(f"Deputado: {dep_db[0]}, cadastrado com sucesso!")
-        except Exception as save_deputado_exception:
-            logger.error(
-                f"Erro ao salvar deputado no banco. "
-                f"\nDetalhe do erro: {save_deputado_exception.args}"
-            )
-            logger.error(f"Dados do Deputado: {nome}, ID: {id_deputado}")
+    for deputado in lista_deputados:
+        salvar_dados_do_deputado_no_banco(deputado)
