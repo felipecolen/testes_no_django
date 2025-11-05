@@ -1,0 +1,26 @@
+image: python:3.10.7-alpine3.16
+
+stages:
+  - testes
+
+cache:
+  paths:
+  - ~/.cache/pip/
+
+.testes: &testes
+  stage: testes
+  variables:
+    DB_NAME: os.path.join(BASE_DIR, 'db.sqlite3')
+    DATABASE_ENGINE: django.db.backends.sqlite3
+  script:
+    - pip install -r requirements.txt
+
+testeApp:
+  <<: *testes
+  after_script:
+    - python manage.py test
+
+testeDeploy:
+  <<: *testes
+  after_script:
+    - python manage.py check --deploy
