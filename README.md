@@ -44,6 +44,10 @@ Posteriormente, pela linha de comando será necessário apenas
     python manage.py runserver
 
 
+## Rodar os testes
+    python manage.py test
+
+
 ## Docker
     docker-compose up -d
 
