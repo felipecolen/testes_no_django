@@ -1,5 +1,12 @@
 # Django Backend
-Projeto desenvolvido para uma aula sobre Testes em Software na prática.
+Projeto desenvolvido para uma aula prática sobre Testes em Software.
+
+Navegue pelas branchs para acompanhar a evolução do código, nesta sequência:
+
+1. feature/estrutura-base
+2. feature/consumir-api-camara
+3. tests/adicionar-testes
+4. tests/refatorando-para-adicionar-testes
 
 
 ### Subir o projeto
